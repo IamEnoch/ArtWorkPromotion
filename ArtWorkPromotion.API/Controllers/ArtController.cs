@@ -155,7 +155,7 @@ namespace ArtWorkPromotion.API.Controllers
 
         // POST: api/Art
         [HttpPost]
-        [Authorize]
+        //[Authorize]
         public async Task<ActionResult<ArtWork>> PostArt([FromBody]ArtWork artWork)
         {
             var uniqueStoragePath = $"{DateTime.Now.ToString("yyMMddHHmmss")}{artWork.Name}";

@@ -15,4 +15,14 @@
     <ProjectReference Include="..\ArtWorkPromotion.PCL\ArtWorkPromotion.PCL.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="SeedData\seed data art promotion.xlsx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+
+    <None Update="SeedData\Images">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+
+  </ItemGroup>
 </Project>

@@ -5,6 +5,11 @@ namespace ArtWorkPromotion.PCL.Models
 {
 	public class ArtWork
 	{
+        public ArtWork()
+        {
+
+        }
+
         public ArtWork(Guid id, string name, string description, string artistName,
             Guid artistId, string location, double price, Category category, ArtImages artImages)
         {
