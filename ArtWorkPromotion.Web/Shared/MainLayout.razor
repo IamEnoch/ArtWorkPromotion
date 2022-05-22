@@ -25,11 +25,13 @@
 
 @code {
     private MudTheme? _currentTheme;
+    private string url = string.Empty;
     protected override async Task OnInitializedAsync()
     {
         _currentTheme = Theme.DefaultTheme;
         _currentTheme = await _clientPreferenceManager.GetCurrentThemeAsync();
     }
 
+   
 
 }

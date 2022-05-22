@@ -3,8 +3,25 @@
 
 <MudText Typo="Typo.h4" GutterBottom="true">Drawings</MudText>
 
+<MudGrid Spacing="5" Justify="Justify.Center">
+    @foreach (var art in arts)
+    {
+        <MudItem>
+            <MudPaper Height="200px" Width="200px">
+                <ArtCard Name="@art.Name" ArtistName="@art.Description" />
+            </MudPaper>
+        </MudItem>
+    }
+    </MudGrid>
 
+    @code {
+    public List<Art> arts { get; set; }
 
-@code {
-    public int MyProperty { get; set; }
+    protected override async Task OnInitializedAsync()
+    {
+        arts = ArtMocks.GetArts();
+        arts.ForEach(Console.WriteLine);
+
+        Console.WriteLine("sanity check");
+    }
 }
