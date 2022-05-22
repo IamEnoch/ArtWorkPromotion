@@ -6,6 +6,23 @@ namespace ArtWorkPromotion.API.Models
 {
 	public class Art
 	{
+        public Art()
+        {
+
+        }
+
+        public Art(string name, string description, double price,
+            Category category, Guid appUserId, string storagePath, string location)
+        {
+            Name = name;
+            Description = description;
+            Price = price;
+            Category = category;
+            AppUserId = appUserId;
+            StoragePath = storagePath;
+            Location = location;
+        }
+
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public Guid Id { get; set; }
         public string Name { get; set; }
