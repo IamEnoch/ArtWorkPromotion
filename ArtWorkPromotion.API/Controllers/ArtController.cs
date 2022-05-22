@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using ArtWorkPromotion.API.Data;
 using ArtWorkPromotion.API.Models;
 using ArtWorkPromotion.PCL.Models;
+using ArtWorkPromotion.API.Interfaces;
 
 namespace ArtWorkPromotion.API.Controllers
 {
@@ -11,10 +12,12 @@ namespace ArtWorkPromotion.API.Controllers
     public class ArtController : ControllerBase
     {
         private readonly AppDbContext _context;
+        private readonly IBlobStorageService _blobStorageService;
 
-        public ArtController(AppDbContext context)
+        public ArtController(AppDbContext context, IBlobStorageService blobStorageService)
         {
             _context = context;
+            _blobStorageService = blobStorageService;
         }
 
         // GET: api/Art
@@ -23,7 +26,10 @@ namespace ArtWorkPromotion.API.Controllers
         {
             return await _context.Arts
                 .Join(_context.Users, a => a.AppUserId, u => u.Id, (a, u) => new { a, u })
-                .Select(x => new ArtWork(x.a.Id, x.a.Name, x.a.Description, $"{x.u.FirstName} {x.u.LastName}", x.u.Id, x.a.Location, x.a.Price, x.a.Category, x.a.StoragePath))
+                .Select(x => new ArtWork(x.a.Id, x.a.Name,
+                        x.a.Description, $"{x.u.FirstName} {x.u.LastName}",
+                        x.u.Id, x.a.Location, x.a.Price, x.a.Category,
+                        _blobStorageService.GetArtImages("", x.a.StoragePath, x.u.Id.ToString())))
                 .ToListAsync();
         }
 
@@ -40,7 +46,10 @@ namespace ArtWorkPromotion.API.Controllers
 
             var user = await _context.Users.FindAsync(art.AppUserId);
 
-            return new ArtWork(art.Id, art.Name, art.Description, $"{user?.FirstName} {user?.LastName}", user.Id, art.Location, art.Price, art.Category, art.StoragePath); ;
+            return new ArtWork(art.Id, art.Name, art.Description,
+                $"{user?.FirstName} {user?.LastName}", user.Id, art.Location,
+                art.Price, art.Category, _blobStorageService.GetArtImages("", art.StoragePath, user.Id.ToString()));
+
         }
 
         // PUT: api/Art/5
@@ -63,7 +72,6 @@ namespace ArtWorkPromotion.API.Controllers
             art.Location = artWork.Location;
             art.Name = artWork.Name;
             art.Price = artWork.Price;
-            art.StoragePath = artWork.StoragePath;
 
             try
             {
@@ -88,7 +96,8 @@ namespace ArtWorkPromotion.API.Controllers
         [HttpPost]
         public async Task<ActionResult<ArtWork>> PostArt(ArtWork artWork)
         {
-            var art = new Art(artWork.Name, artWork.Description, artWork.Price, artWork.Category, artWork.ArtistId, artWork.StoragePath, artWork.Location);
+            var uniqueStoragePath = $"{DateTime.Now.ToString("yyMMddHHmmss")}{artWork.Name}";
+            var art = new Art(artWork.Name, artWork.Description, artWork.Price, artWork.Category, artWork.ArtistId, uniqueStoragePath, artWork.Location);
             _context.Arts.Add(art);
             await _context.SaveChangesAsync();
 

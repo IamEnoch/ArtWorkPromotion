@@ -1,4 +1,7 @@
-﻿using ArtWorkPromotion.API.Data;
+﻿using System.Text.Json.Serialization;
+using ArtWorkPromotion.API.Data;
+using ArtWorkPromotion.API.Interfaces;
+using ArtWorkPromotion.API.Services;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -10,7 +13,13 @@ builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlServer(connectionString);
 });
 
-builder.Services.AddControllers();
+// dependency injection
+builder.Services.AddTransient<IBlobStorageService, BlobStorageService>();
+
+builder.Services.AddControllers()
+    // return enums as strings not integers
+    .AddJsonOptions(options => options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter()));
+
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
