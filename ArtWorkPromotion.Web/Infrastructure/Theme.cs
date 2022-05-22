@@ -113,6 +113,7 @@ public class Theme
         {
             Primary = "#27485D",
             AppbarBackground = Colors.Grey.Lighten5,
+            SecondaryLighten= "#F4F4F2",
             Background = Colors.Grey.Lighten5,
             DrawerBackground = "#D8D8D8",
             DrawerText = "rgba(0,0,0, 0.7)",
