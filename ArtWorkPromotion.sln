@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ArtWorkPromotion.Web", "Art
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ArtWorkPromotion.API", "ArtWorkPromotion.API\ArtWorkPromotion.API.csproj", "{59984EA6-36A4-4BA7-8FD0-D10142E217D3}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ArtWorkPromotion.PCL", "ArtWorkPromotion.PCL\ArtWorkPromotion.PCL.csproj", "{58A789A2-C7C8-4FB4-95AB-E74D53316167}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{59984EA6-36A4-4BA7-8FD0-D10142E217D3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{59984EA6-36A4-4BA7-8FD0-D10142E217D3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{59984EA6-36A4-4BA7-8FD0-D10142E217D3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{58A789A2-C7C8-4FB4-95AB-E74D53316167}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{58A789A2-C7C8-4FB4-95AB-E74D53316167}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{58A789A2-C7C8-4FB4-95AB-E74D53316167}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{58A789A2-C7C8-4FB4-95AB-E74D53316167}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

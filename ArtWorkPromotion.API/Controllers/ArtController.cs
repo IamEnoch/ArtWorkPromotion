@@ -4,6 +4,8 @@ using ArtWorkPromotion.API.Data;
 using ArtWorkPromotion.API.Models;
 using ArtWorkPromotion.PCL.Models;
 using ArtWorkPromotion.API.Interfaces;
+using Microsoft.AspNetCore.Authorization;
+using ArtWorkPromotion.PCL.Helpers;
 
 namespace ArtWorkPromotion.API.Controllers
 {
@@ -33,7 +35,34 @@ namespace ArtWorkPromotion.API.Controllers
                 .ToListAsync();
         }
 
-        // GET: api/Art/5
+        //GET: api/Art/category/drawing
+        [HttpGet("category/{category}")]
+        public async Task<ActionResult<IEnumerable<ArtWork>>> GetArtByCategory(Category category)
+        {
+            return await _context.Arts.Where(a=>a.Category==category)
+                .Join(_context.Users, a => a.AppUserId, u => u.Id, (a, u) => new { a, u })
+                .Select(x => new ArtWork(x.a.Id, x.a.Name,
+                        x.a.Description, $"{x.u.FirstName} {x.u.LastName}",
+                        x.u.Id, x.a.Location, x.a.Price, x.a.Category,
+                        _blobStorageService.GetArtImages("", x.a.StoragePath, x.u.Id.ToString())))
+                .ToListAsync();
+        }
+
+        //GET: api/Art/artist/a40ac323-d0a4-460d-bc66-81fe2c6c3da0
+        [HttpGet("artist/{artistId}")]
+        public async Task<ActionResult<IEnumerable<ArtWork>>> GetArtByArtistId(Guid artistId)
+        {
+            return await _context.Arts
+                .Join(_context.Users.Where(u => u.Id == artistId), a => a.AppUserId, u => u.Id, (a, u) => new { a, u })
+                .Select(x => new ArtWork(x.a.Id, x.a.Name,
+                        x.a.Description, $"{x.u.FirstName} {x.u.LastName}",
+                        x.u.Id, x.a.Location, x.a.Price, x.a.Category,
+                        _blobStorageService.GetArtImages("", x.a.StoragePath, x.u.Id.ToString())))
+                .ToListAsync();
+        }
+
+
+        // GET: api/Art/a40ac323-d0a4-460d-bc66-81fe2c6c3da0
         [HttpGet("{id}")]
         public async Task<ActionResult<ArtWork>> GetArt(Guid id)
         {
@@ -54,6 +83,7 @@ namespace ArtWorkPromotion.API.Controllers
 
         // PUT: api/Art/5
         [HttpPut("{id}")]
+        [Authorize]
         public async Task<IActionResult> PutArt(Guid id, ArtWork artWork)
         {
             if (id != artWork.Id)
@@ -94,6 +124,7 @@ namespace ArtWorkPromotion.API.Controllers
 
         // POST: api/Art
         [HttpPost]
+        [Authorize]
         public async Task<ActionResult<ArtWork>> PostArt(ArtWork artWork)
         {
             var uniqueStoragePath = $"{DateTime.Now.ToString("yyMMddHHmmss")}{artWork.Name}";
@@ -106,6 +137,7 @@ namespace ArtWorkPromotion.API.Controllers
 
         // DELETE: api/Art/5
         [HttpDelete("{id}")]
+        [Authorize]
         public async Task<IActionResult> DeleteArt(Guid id)
         {
             var art = await _context.Arts.FindAsync(id);
