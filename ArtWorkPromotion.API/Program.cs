@@ -61,6 +61,7 @@ builder.Services.AddAuthorization(options =>
 
 // dependency injection
 builder.Services.AddTransient<IBlobStorageService, BlobStorageService>();
+builder.Services.AddScoped<IUserService, UserService>(); 
 
 builder.Services.AddControllers()
     // return enums as strings not integers

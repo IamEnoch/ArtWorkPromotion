@@ -15,6 +15,8 @@ namespace ArtWorkPromotion.API.Controllers
     {
         private readonly AppDbContext _context;
         private readonly IBlobStorageService _blobStorageService;
+        private string artContainerName = "arts";
+
 
         public ArtController(AppDbContext context, IBlobStorageService blobStorageService)
         {
@@ -57,7 +59,7 @@ namespace ArtWorkPromotion.API.Controllers
                 .Select(x => new ArtWork(x.a.Id, x.a.Name,
                         x.a.Description, $"{x.u.FirstName} {x.u.LastName}",
                         x.u.Id, x.a.Location, x.a.Price, x.a.Category,
-                        _blobStorageService.GetArtImages("", x.a.StoragePath, x.u.Id.ToString())))
+                        _blobStorageService.GetArtImages(artContainerName, x.a.StoragePath, x.u.Id.ToString())))
                 .ToListAsync();
         }
 
@@ -81,7 +83,7 @@ namespace ArtWorkPromotion.API.Controllers
 
         }
 
-        // PUT: api/Art/5
+        // PUT: api/Art/a40ac323-d0a4-460d-bc66-81fe2c6c3da0
         [HttpPut("{id}")]
         [Authorize]
         public async Task<IActionResult> PutArt(Guid id, ArtWork artWork)
@@ -122,10 +124,39 @@ namespace ArtWorkPromotion.API.Controllers
             return NoContent();
         }
 
+        //GET: api/Art/blobUpload/a40ac323-d0a4-460d-bc66-81fe2c6c3da0
+        [HttpGet("blobUpload/{artId}")]
+        [Authorize]
+        public async Task<ActionResult<BlobUpload>> GetblobUploadInfo(Guid artId)
+        {
+            var art = await _context.Arts.FindAsync(artId);
+            if(art is null)
+            {
+                return NotFound("No art was found with the provided Id");
+            }
+
+            var container = await _blobStorageService.CreateContainerAsync(artContainerName);
+            if (container != null)
+            {
+                var blobUpload = new BlobUpload()
+                {
+                    ConatinerName=container.ConatinerName,
+                    ContainerUrl=container.ContainerUrl,
+                    Prefix= $"{art.AppUserId}/{art.StoragePath}",
+                    ConnectionString=container.ConnectionString,
+                    TokenExpiry=container.TokenExpiry      
+                };
+
+                return Ok(blobUpload);
+            }
+            return StatusCode(500);
+
+        }
+
         // POST: api/Art
         [HttpPost]
         [Authorize]
-        public async Task<ActionResult<ArtWork>> PostArt(ArtWork artWork)
+        public async Task<ActionResult<ArtWork>> PostArt([FromBody]ArtWork artWork)
         {
             var uniqueStoragePath = $"{DateTime.Now.ToString("yyMMddHHmmss")}{artWork.Name}";
             var art = new Art(artWork.Name, artWork.Description, artWork.Price, artWork.Category, artWork.ArtistId, uniqueStoragePath, artWork.Location);
@@ -135,7 +166,7 @@ namespace ArtWorkPromotion.API.Controllers
             return CreatedAtAction("GetArt", new { id = art.Id }, art);
         }
 
-        // DELETE: api/Art/5
+        // DELETE: api/Art/a40ac323-d0a4-460d-bc66-81fe2c6c3da0
         [HttpDelete("{id}")]
         [Authorize]
         public async Task<IActionResult> DeleteArt(Guid id)
