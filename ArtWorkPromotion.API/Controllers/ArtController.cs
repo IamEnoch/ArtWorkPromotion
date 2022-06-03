@@ -156,10 +156,10 @@ namespace ArtWorkPromotion.API.Controllers
         // POST: api/Art
         [HttpPost]
         //[Authorize]
-        public async Task<ActionResult<ArtWork>> PostArt([FromBody]ArtWork artWork)
+        public async Task<ActionResult<ArtWork>> PostArt([FromBody]NewArt newArt)
         {
-            var uniqueStoragePath = $"{DateTime.Now.ToString("yyMMddHHmmss")}{artWork.Name}";
-            var art = new Art(artWork.Name, artWork.Description, artWork.Price, artWork.Category, artWork.ArtistId, uniqueStoragePath, artWork.Location);
+            var uniqueStoragePath = $"{DateTime.Now.ToString("yyMMddHHmmss")}{newArt.Name}";
+            var art = new Art(newArt.Name, newArt.Description, newArt.Price, newArt.Category, newArt.ArtistId, uniqueStoragePath, newArt.Location);
             _context.Arts.Add(art);
             await _context.SaveChangesAsync();
 

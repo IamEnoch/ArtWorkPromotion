@@ -18,7 +18,9 @@ namespace ArtWorkPromotion.API.Services
 
         public async Task<BlobContainer> CreateContainerAsync(string containerName)
         {
+            //Connection string of the storage account
             var connString = _configuration.GetConnectionString("BlobStorageConnectionString");
+
 
             var container = new BlobContainerClient(connString, containerName);
             await container.CreateIfNotExistsAsync();
@@ -70,13 +72,13 @@ namespace ArtWorkPromotion.API.Services
 
             var blobItems = containerClient.GetBlobs(prefix: prefix).Where(i => i.Name.Contains($"{prefix}/"));
 
-            var faultImages = blobItems
+            var artImages = blobItems
                 .Select(blobItem => $"{containerClient.Uri}/{blobItem.Name}?{blobStorageToken.Token}")
                 .ToList();
 
             return new ArtImages
             {
-                ImageUrls = faultImages,
+                ImageUrls = artImages,
                 ExpiresOn = blobStorageToken.ExpiresOn
             };
         }
