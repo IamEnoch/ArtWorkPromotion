@@ -66,6 +66,7 @@ namespace ArtWorkPromotion.API.Services
         {
             var connectionString = _configuration.GetConnectionString("BlobStorageConnectionString");
             var containerClient = new BlobContainerClient(connectionString, containerName);
+            containerClient.CreateIfNotExists();
 
             var blobStorageToken = GetBlobSasToken(containerClient);
             var prefix = $"{artistId}/{uniqueStorageName}";

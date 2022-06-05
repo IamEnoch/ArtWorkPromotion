@@ -33,7 +33,7 @@ namespace ArtWorkPromotion.API.Controllers
                 .Select(x => new ArtWork(x.a.Id, x.a.Name,
                         x.a.Description, x.u.Name,
                         x.u.Id, x.a.Price, x.a.Category,
-                        _blobStorageService.GetArtImages("", x.a.StoragePath, x.u.Id.ToString())))
+                        _blobStorageService.GetArtImages("arts", x.a.StoragePath, x.u.Id.ToString())))
                 .ToListAsync();
         }
 
@@ -46,7 +46,7 @@ namespace ArtWorkPromotion.API.Controllers
                 .Select(x => new ArtWork(x.a.Id, x.a.Name,
                         x.a.Description, x.u.Name,
                         x.u.Id, x.a.Price, x.a.Category,
-                        _blobStorageService.GetArtImages("", x.a.StoragePath, x.u.Id.ToString())))
+                        _blobStorageService.GetArtImages("arts", x.a.StoragePath, x.u.Id.ToString())))
                 .ToListAsync();
         }
 
@@ -59,7 +59,7 @@ namespace ArtWorkPromotion.API.Controllers
                 .Select(x => new ArtWork(x.a.Id, x.a.Name,
                         x.a.Description, x.u.Name,
                         x.u.Id, x.a.Price, x.a.Category,
-                        _blobStorageService.GetArtImages(artContainerName, x.a.StoragePath, x.u.Id.ToString())))
+                        _blobStorageService.GetArtImages("arts", x.a.StoragePath, x.u.Id.ToString())))
                 .ToListAsync();
         }
 
@@ -84,7 +84,7 @@ namespace ArtWorkPromotion.API.Controllers
                                user.Id,
                                art.Price,
                                art.Category,
-                               _blobStorageService.GetArtImages("", art.StoragePath, user.Id.ToString())
+                               _blobStorageService.GetArtImages("arts", art.StoragePath, user.Id.ToString())
                                );
 
         }

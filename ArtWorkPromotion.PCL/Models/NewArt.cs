@@ -9,12 +9,11 @@ namespace ArtWorkPromotion.PCL.Models
 {
     public class NewArt
     {
-        public NewArt(string name, string description, Guid artistId, string location, double price, Category category)
+        public NewArt(string name, string description, Guid artistId, double price, Category category)
         {
             Name = name;
             Description = description;
             ArtistId = artistId;
-            Location = location;
             Price = price;
             Category = category;
         }
@@ -24,8 +23,6 @@ namespace ArtWorkPromotion.PCL.Models
         public string Description { get; set; }
 
         public Guid ArtistId { get; set; }
-
-        public string Location { get; set; }
 
         public double Price { get; set; }
 

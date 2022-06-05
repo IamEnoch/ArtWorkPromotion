@@ -162,7 +162,7 @@ namespace ArtWorkPromotion.API.Migrations
 
                     b.HasIndex("AppUserId");
 
-                    b.ToTable("Arts");
+                    b.ToTable("Arts", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<System.Guid>", b =>
