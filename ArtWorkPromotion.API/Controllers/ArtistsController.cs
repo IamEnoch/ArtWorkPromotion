@@ -27,7 +27,7 @@ namespace ArtWorkPromotion.API.Controllers
         public async Task<ActionResult<IEnumerable<Artist>>> GetUsers()
         {
             return await _context.Users
-                .Select(u=>new Artist(u.FirstName, u.LastName, u.Email, u.PhoneNumber, u.Id))
+                .Select(u=>new Artist(u.Name, u.Email, u.PhoneNumber, u.Id, u.Brand, u.Description, u.Location, u.Address))
                 .ToListAsync();
         }
 
@@ -42,7 +42,7 @@ namespace ArtWorkPromotion.API.Controllers
                 return NotFound();
             }
 
-            return new Artist(appUser.FirstName, appUser.LastName, appUser.Email, appUser.PhoneNumber, appUser.Id);
+            return new Artist(appUser.Name, appUser.Email, appUser.PhoneNumber, appUser.Id, appUser.Brand, appUser.Description, appUser.Location, appUser.Address);
         }
 
         // PUT: api/Artists/a40ac323-d0a4-460d-bc66-81fe2c6c3da0
@@ -61,10 +61,13 @@ namespace ArtWorkPromotion.API.Controllers
                 return NotFound("No artist was found with the provided Id");
             }
 
-            appUser.FirstName = artist.FirstName;
-            appUser.LastName = artist.LastName;
+            appUser.Name = artist.Name;
             appUser.Email = artist.Email;
             appUser.PhoneNumber = artist.PhoneNumber;
+            appUser.Brand = artist.Brand;
+            appUser.Description = artist.Description;
+            appUser.Location = artist.Location;
+            appUser.Address = artist.Address;
 
             try
             {

@@ -30,6 +30,8 @@ namespace ArtWorkPromotion.API.Data
             builder.Entity<IdentityUserToken<Guid>>(entity => { entity.ToTable("UserTokens", "Security"); });
 
         }
+
+        public DbSet<ArtWorkPromotion.API.Models.Social>? Social { get; set; }
     }
 }
 

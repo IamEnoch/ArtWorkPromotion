@@ -46,10 +46,9 @@ namespace ArtWorkPromotion.Seed
             {
                 var artWork = new ArtWork
                 {
-                    Id=null,
+                    Id=Guid.Empty,
                     Name = worksheet[row, 1].DisplayText,
                     Description = worksheet[row, 2].DisplayText,
-                    Location = worksheet[row, 3].DisplayText,
                     Price = double.Parse(worksheet[row, 4].DisplayText),
                     Category = (Category)Enum.Parse(typeof(Category), worksheet[row, 5].DisplayText)
                 };

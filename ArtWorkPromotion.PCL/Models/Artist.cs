@@ -3,32 +3,36 @@ namespace ArtWorkPromotion.PCL.Models
 {
     public class Artist
     {
-        private string fullName;
-
         public Artist()
         {
         }
 
-        public Artist(string firstName, string lastName, string email, string phoneNumber, Guid id)
+        public Artist(string name, string email, string phoneNumber, Guid id, string brand, string description, string location, string address)
         {
-            FirstName = firstName;
-            LastName = lastName;
+            Name = name;
             Email = email;
             PhoneNumber = phoneNumber;
             Id = id;
+            Brand = brand;
+            Description = description;
+            Location = location;
+            Address = address;
         }
 
         public Guid Id { get; set; }
-        public string FirstName { get; set; }
-        public string LastName { get; set; }
+        public string Name { get; set; }
         public string Email { get; set; }
         public string PhoneNumber { get; set; }
+        public string Description { get; set; }
+        public string Brand { get; set; }
+        public string Location { get; set; }
+        public string Address { get; set; }
 
-        public string FullName
+        /*public string FullName
         {
             get => $"{FirstName} {LastName}";
             set => fullName = value;
-        }
+        }*/
     }
 }
 

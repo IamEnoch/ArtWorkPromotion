@@ -87,11 +87,15 @@ namespace ArtWorkPromotion.API.Services
 
             appUser = new AppUser()
             {
-                FirstName = registrationInfo.FirstName,
-                LastName = registrationInfo.LastName,
+                Name = registrationInfo.Name,
                 Email = registrationInfo.Email,
                 UserName = registrationInfo.Email,
-                PhoneNumber = registrationInfo.PhoneNumber
+                PhoneNumber = registrationInfo.PhoneNumber,
+                Description = registrationInfo.Address,
+                Brand = registrationInfo.Brand,
+                Location = registrationInfo.Location,
+                Address = registrationInfo.Address
+
             };
 
             var identityResult = await new PasswordValidator<AppUser>().ValidateAsync(_userManager, appUser, registrationInfo.Password);

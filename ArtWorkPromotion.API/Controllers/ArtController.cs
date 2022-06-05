@@ -31,8 +31,8 @@ namespace ArtWorkPromotion.API.Controllers
             return await _context.Arts
                 .Join(_context.Users, a => a.AppUserId, u => u.Id, (a, u) => new { a, u })
                 .Select(x => new ArtWork(x.a.Id, x.a.Name,
-                        x.a.Description, $"{x.u.FirstName} {x.u.LastName}",
-                        x.u.Id, x.a.Location, x.a.Price, x.a.Category,
+                        x.a.Description, x.u.Name,
+                        x.u.Id, x.a.Price, x.a.Category,
                         _blobStorageService.GetArtImages("", x.a.StoragePath, x.u.Id.ToString())))
                 .ToListAsync();
         }
@@ -44,8 +44,8 @@ namespace ArtWorkPromotion.API.Controllers
             return await _context.Arts.Where(a=>a.Category==category)
                 .Join(_context.Users, a => a.AppUserId, u => u.Id, (a, u) => new { a, u })
                 .Select(x => new ArtWork(x.a.Id, x.a.Name,
-                        x.a.Description, $"{x.u.FirstName} {x.u.LastName}",
-                        x.u.Id, x.a.Location, x.a.Price, x.a.Category,
+                        x.a.Description, x.u.Name,
+                        x.u.Id, x.a.Price, x.a.Category,
                         _blobStorageService.GetArtImages("", x.a.StoragePath, x.u.Id.ToString())))
                 .ToListAsync();
         }
@@ -57,8 +57,8 @@ namespace ArtWorkPromotion.API.Controllers
             return await _context.Arts
                 .Join(_context.Users.Where(u => u.Id == artistId), a => a.AppUserId, u => u.Id, (a, u) => new { a, u })
                 .Select(x => new ArtWork(x.a.Id, x.a.Name,
-                        x.a.Description, $"{x.u.FirstName} {x.u.LastName}",
-                        x.u.Id, x.a.Location, x.a.Price, x.a.Category,
+                        x.a.Description, x.u.Name,
+                        x.u.Id, x.a.Price, x.a.Category,
                         _blobStorageService.GetArtImages(artContainerName, x.a.StoragePath, x.u.Id.ToString())))
                 .ToListAsync();
         }
@@ -77,9 +77,15 @@ namespace ArtWorkPromotion.API.Controllers
 
             var user = await _context.Users.FindAsync(art.AppUserId);
 
-            return new ArtWork(art.Id, art.Name, art.Description,
-                $"{user?.FirstName} {user?.LastName}", user.Id, art.Location,
-                art.Price, art.Category, _blobStorageService.GetArtImages("", art.StoragePath, user.Id.ToString()));
+            return new ArtWork(art.Id,
+                               art.Name,
+                               art.Description,
+                               user?.Name,
+                               user.Id,
+                               art.Price,
+                               art.Category,
+                               _blobStorageService.GetArtImages("", art.StoragePath, user.Id.ToString())
+                               );
 
         }
 
@@ -101,7 +107,6 @@ namespace ArtWorkPromotion.API.Controllers
 
             art.Category = artWork.Category;
             art.Description = artWork.Description;
-            art.Location = artWork.Location;
             art.Name = artWork.Name;
             art.Price = artWork.Price;
 
@@ -159,7 +164,7 @@ namespace ArtWorkPromotion.API.Controllers
         public async Task<ActionResult<ArtWork>> PostArt([FromBody]NewArt newArt)
         {
             var uniqueStoragePath = $"{DateTime.Now.ToString("yyMMddHHmmss")}{newArt.Name}";
-            var art = new Art(newArt.Name, newArt.Description, newArt.Price, newArt.Category, newArt.ArtistId, uniqueStoragePath, newArt.Location);
+            var art = new Art(newArt.Name, newArt.Description, newArt.Price, newArt.Category, newArt.ArtistId, uniqueStoragePath);
             _context.Arts.Add(art);
             await _context.SaveChangesAsync();
 
