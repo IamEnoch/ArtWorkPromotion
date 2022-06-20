@@ -7,7 +7,7 @@ using Azure.Storage.Sas;
 
 namespace ArtWorkPromotion.API.Services
 {
-	public class BlobStorageService : IBlobStorageService
+	/*public class BlobStorageService : IBlobStorageService
 	{
         private readonly IConfiguration _configuration;
 
@@ -62,7 +62,7 @@ namespace ArtWorkPromotion.API.Services
             return sasBuilder.ToSasQueryParameters(key).ToString();
         }
 
-        public ArtImages GetArtImages(string containerName, string uniqueStorageName, string artistId)
+        public ArtImage GetArtImages(string containerName, string uniqueStorageName, string artistId)
         {
             var connectionString = _configuration.GetConnectionString("BlobStorageConnectionString");
             var containerClient = new BlobContainerClient(connectionString, containerName);
@@ -71,15 +71,15 @@ namespace ArtWorkPromotion.API.Services
             var blobStorageToken = GetBlobSasToken(containerClient);
             var prefix = $"{artistId}/{uniqueStorageName}";
 
-            var blobItems = containerClient.GetBlobs(prefix: prefix).Where(i => i.Name.Contains($"{prefix}/"));
+            var blobItems = containerClient.GetBlobs(prefix: prefix).Where(i => i.Name.Contains($"{prefix}"));
 
             var artImages = blobItems
                 .Select(blobItem => $"{containerClient.Uri}/{blobItem.Name}?{blobStorageToken.Token}")
                 .ToList();
 
-            return new ArtImages
+            return new ArtImage
             {
-                ImageUrls = artImages,
+                ImageUrl = artImages,
                 ExpiresOn = blobStorageToken.ExpiresOn
             };
         }
@@ -102,6 +102,6 @@ namespace ArtWorkPromotion.API.Services
             return token;
         }
 
-    }
+    }*/
 }
 

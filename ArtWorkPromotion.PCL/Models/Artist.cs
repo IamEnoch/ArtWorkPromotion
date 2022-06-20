@@ -7,7 +7,7 @@ namespace ArtWorkPromotion.PCL.Models
         {
         }
 
-        public Artist(string name, string email, string phoneNumber, Guid id, string brand, string description, string location, string address)
+        public Artist(string name, string email, string phoneNumber, Guid id, string brand, string description, string location, string address, string artistImageUrl)
         {
             Name = name;
             Email = email;
@@ -17,6 +17,7 @@ namespace ArtWorkPromotion.PCL.Models
             Description = description;
             Location = location;
             Address = address;
+            ArtistImageUrl = artistImageUrl;
         }
 
         public Guid Id { get; set; }
@@ -27,6 +28,7 @@ namespace ArtWorkPromotion.PCL.Models
         public string Brand { get; set; }
         public string Location { get; set; }
         public string Address { get; set; }
+        public string ArtistImageUrl { get; set; }
 
         /*public string FullName
         {

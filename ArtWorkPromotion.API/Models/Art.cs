@@ -12,14 +12,14 @@ namespace ArtWorkPromotion.API.Models
         }
 
         public Art(string name, string description, double price,
-            Category category, Guid appUserId, string storagePath)
+            Category category, Guid appUserId, string artImageUrl)
         {
             Name = name;
             Description = description;
             Price = price;
             Category = category;
             AppUserId = appUserId;
-            StoragePath = storagePath;
+            ArtImageUrl = artImageUrl;
         }
 
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
@@ -30,7 +30,9 @@ namespace ArtWorkPromotion.API.Models
         public Category Category { get; set; }
         [ForeignKey(nameof(AppUser))]
         public Guid AppUserId { get; set; }
-        public string StoragePath { get; set; }
+
+        //public string StoragePath { get; set; }
+        public string ArtImageUrl { get; set; }
 
 
         public virtual AppUser AppUser { get; set; }

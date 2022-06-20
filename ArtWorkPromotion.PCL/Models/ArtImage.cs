@@ -1,13 +1,13 @@
 ﻿using System;
 namespace ArtWorkPromotion.PCL.Models
 {
-	public class ArtImages
+	public class ArtImage
 	{
-		public ArtImages()
+		public ArtImage()
 		{
 		}
 
-        public List<string> ImageUrls { get; set; }
+        public string ImageUrl { get; set; }
         public DateTime ExpiresOn { get; set; }
 
     }

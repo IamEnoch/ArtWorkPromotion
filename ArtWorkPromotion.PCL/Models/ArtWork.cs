@@ -11,7 +11,7 @@ namespace ArtWorkPromotion.PCL.Models
         }
 
         public ArtWork(Guid id, string name, string description, string artistName,
-            Guid artistId, double price, Category category, ArtImages artImages)
+            Guid artistId, double price, Category category, string ?artImageUrl)
         {
             Id = id;
             Name = name;
@@ -20,7 +20,7 @@ namespace ArtWorkPromotion.PCL.Models
             ArtistId = artistId;
             Price = price;
             Category = category;
-            ArtImages = artImages;
+            ArtImageUrl = artImageUrl;
         }
 
         public Guid Id { get; set; }
@@ -30,7 +30,7 @@ namespace ArtWorkPromotion.PCL.Models
         public Guid ArtistId { get; set; }
         public double Price { get; set; }
         public Category Category { get; set; }
-        public ArtImages ArtImages { get; set; }
+        public string ArtImageUrl { get; set; }
 
     }
 }

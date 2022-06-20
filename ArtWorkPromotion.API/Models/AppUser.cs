@@ -15,6 +15,8 @@ namespace ArtWorkPromotion.API.Models
 
         public string? Address { get; set; }
 
+        public string? UserImageUrl { get; set; }
+
         public virtual ICollection<Art> Arts { get; set; }
         public virtual Social Social { get; set; }
     }

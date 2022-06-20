@@ -61,7 +61,7 @@ builder.Services.AddAuthorization(options =>
 });
 
 // dependency injection
-builder.Services.AddTransient<IBlobStorageService, BlobStorageService>();
+//builder.Services.AddTransient<IBlobStorageService, BlobStorageService>();
 builder.Services.AddScoped<IUserService, UserService>(); 
 
 builder.Services.AddControllers()

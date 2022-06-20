@@ -48,7 +48,7 @@ namespace ArtWorkPromotion.API.Interfaces
         /// <param name="uniqueStorageName"></param>
         /// <param name="artistId"></param>
         /// <returns></returns>
-        ArtImages GetArtImages(string containerName, string uniqueStorageName, string artistId);
+        ArtImage GetArtImages(string containerName, string uniqueStorageName, string artistId);
     }
 }
 

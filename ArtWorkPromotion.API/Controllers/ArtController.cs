@@ -14,53 +14,140 @@ namespace ArtWorkPromotion.API.Controllers
     public class ArtController : ControllerBase
     {
         private readonly AppDbContext _context;
-        private readonly IBlobStorageService _blobStorageService;
+        //private readonly IBlobStorageService _blobStorageService;
         private string artContainerName = "arts";
 
 
-        public ArtController(AppDbContext context, IBlobStorageService blobStorageService)
+        public ArtController(AppDbContext context)
         {
             _context = context;
-            _blobStorageService = blobStorageService;
+            //_blobStorageService = blobStorageService;
         }
 
         // GET: api/Art
         [HttpGet]
         public async Task<ActionResult<IEnumerable<ArtWork>>> GetArts()
         {
-            return await _context.Arts
+            List<ArtWork> arts = new List<ArtWork>();
+
+            //Query that does an inner join of art table and appUser table
+            var query = from art in _context.Set<Art>()
+                        join appUser in _context.Set<AppUser>()
+                            on art.AppUserId equals appUser.Id
+                        select new { art, appUser };
+                      
+
+            foreach(var artWork in query)
+            {
+                var artResult = new ArtWork
+                {
+                    Id = artWork.art.Id,
+                    Name = artWork.art.Name,
+                    Description = artWork.art.Description,
+                    ArtistName = artWork.appUser.Name,
+                    ArtistId = artWork.appUser.Id,
+                    Price = artWork.art.Price,
+                    Category = artWork.art.Category,
+                    ArtImageUrl = artWork.art.ArtImageUrl
+
+                };
+
+                arts.Add(artResult);
+            }           
+
+            /*var response = await _context.Arts
                 .Join(_context.Users, a => a.AppUserId, u => u.Id, (a, u) => new { a, u })
                 .Select(x => new ArtWork(x.a.Id, x.a.Name,
                         x.a.Description, x.u.Name,
                         x.u.Id, x.a.Price, x.a.Category,
                         _blobStorageService.GetArtImages("arts", x.a.StoragePath, x.u.Id.ToString())))
-                .ToListAsync();
+                .ToListAsync();*/
+
+            return arts;
         }
 
         //GET: api/Art/category/drawing
         [HttpGet("category/{category}")]
         public async Task<ActionResult<IEnumerable<ArtWork>>> GetArtByCategory(Category category)
         {
-            return await _context.Arts.Where(a=>a.Category==category)
+            List<ArtWork> arts = new List<ArtWork>();
+
+            //Query that does an inner join of art table and appUser table
+            var query = from art in _context.Set<Art>()
+                        join appUser in _context.Set<AppUser>()
+                            on art.AppUserId equals appUser.Id
+                            where art.Category == category
+                        select new { art, appUser };
+
+
+            foreach (var artWork in query)
+            {
+                var artResult = new ArtWork
+                {
+                    Id = artWork.art.Id,
+                    Name = artWork.art.Name,
+                    Description = artWork.art.Description,
+                    ArtistName = artWork.appUser.Name,
+                    ArtistId = artWork.appUser.Id,
+                    Price = artWork.art.Price,
+                    Category = artWork.art.Category,
+                    ArtImageUrl = artWork.art.ArtImageUrl
+
+                };
+
+                arts.Add(artResult);
+            }
+
+            return arts;
+            /*return await _context.Arts.Where(a=>a.Category==category)
                 .Join(_context.Users, a => a.AppUserId, u => u.Id, (a, u) => new { a, u })
                 .Select(x => new ArtWork(x.a.Id, x.a.Name,
                         x.a.Description, x.u.Name,
                         x.u.Id, x.a.Price, x.a.Category,
-                        _blobStorageService.GetArtImages("arts", x.a.StoragePath, x.u.Id.ToString())))
-                .ToListAsync();
+                        _blobStorageService.GetArtImages("arts", x.a.StoragePath, x.a.Id.ToString())))
+                .ToListAsync();*/
         }
 
         //GET: api/Art/artist/a40ac323-d0a4-460d-bc66-81fe2c6c3da0
         [HttpGet("artist/{artistId}")]
         public async Task<ActionResult<IEnumerable<ArtWork>>> GetArtByArtistId(Guid artistId)
         {
-            return await _context.Arts
+
+            List<ArtWork> arts = new List<ArtWork>();
+
+            //Query that does an inner join of art table and appUser table
+            var query = from art in _context.Set<Art>()
+                        join appUser in _context.Set<AppUser>()
+                            on art.AppUserId equals appUser.Id
+                            where appUser.Id == artistId
+                        select new { art, appUser };
+
+
+            foreach (var artWork in query)
+            {
+                var artResult = new ArtWork
+                {
+                    Id = artWork.art.Id,
+                    Name = artWork.art.Name,
+                    Description = artWork.art.Description,
+                    ArtistName = artWork.appUser.Name,
+                    ArtistId = artWork.appUser.Id,
+                    Price = artWork.art.Price,
+                    Category = artWork.art.Category,
+                    ArtImageUrl = artWork.art.ArtImageUrl
+                };
+
+                arts.Add(artResult);
+            }
+
+            return arts;
+            /*return await _context.Arts
                 .Join(_context.Users.Where(u => u.Id == artistId), a => a.AppUserId, u => u.Id, (a, u) => new { a, u })
                 .Select(x => new ArtWork(x.a.Id, x.a.Name,
                         x.a.Description, x.u.Name,
                         x.u.Id, x.a.Price, x.a.Category,
                         _blobStorageService.GetArtImages("arts", x.a.StoragePath, x.u.Id.ToString())))
-                .ToListAsync();
+                .ToListAsync();*/
         }
 
 
@@ -77,16 +164,17 @@ namespace ArtWorkPromotion.API.Controllers
 
             var user = await _context.Users.FindAsync(art.AppUserId);
 
-            return new ArtWork(art.Id,
+            var result = new ArtWork(art.Id,
                                art.Name,
                                art.Description,
                                user?.Name,
                                user.Id,
                                art.Price,
                                art.Category,
-                               _blobStorageService.GetArtImages("arts", art.StoragePath, user.Id.ToString())
+                               art.ArtImageUrl
                                );
 
+            return result;
         }
 
         // PUT: api/Art/a40ac323-d0a4-460d-bc66-81fe2c6c3da0
@@ -130,7 +218,7 @@ namespace ArtWorkPromotion.API.Controllers
         }
 
         //GET: api/Art/blobUpload/a40ac323-d0a4-460d-bc66-81fe2c6c3da0
-        [HttpGet("blobUpload/{artId}")]
+        /*[HttpGet("blobUpload/{artId}")]
         [Authorize]
         public async Task<ActionResult<BlobUpload>> GetblobUploadInfo(Guid artId)
         {
@@ -156,15 +244,15 @@ namespace ArtWorkPromotion.API.Controllers
             }
             return StatusCode(500);
 
-        }
+        }*/
 
         // POST: api/Art
         [HttpPost]
         //[Authorize]
         public async Task<ActionResult<ArtWork>> PostArt([FromBody]NewArt newArt)
         {
-            var uniqueStoragePath = $"{DateTime.Now.ToString("yyMMddHHmmss")}{newArt.Name}";
-            var art = new Art(newArt.Name, newArt.Description, newArt.Price, newArt.Category, newArt.ArtistId, uniqueStoragePath);
+            //var uniqueStoragePath = $"{DateTime.Now.ToString("yyMMddHHmmss")}{newArt.Name}";
+            var art = new Art(newArt.Name, newArt.Description, newArt.Price, newArt.Category, newArt.ArtistId, newArt.ArtImageUrl);
             _context.Arts.Add(art);
             await _context.SaveChangesAsync();
 
