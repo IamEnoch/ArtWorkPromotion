@@ -89,6 +89,42 @@ namespace ArtWorkPromotion.API.Controllers
             return NoContent();
         }
 
+        // PUT: api/Artists/a40ac323-d0a4-460d-bc66-81fe2c6c3da0
+        [HttpPut("ArtistImage/{id}")]
+        public async Task<IActionResult> PutAppUserImage(Guid id, ArtistImageUpdate artist)
+        {
+            if (id != artist.Id)
+            {
+                return BadRequest();
+            }
+
+            var appUser = await _context.Users.FindAsync(id);
+
+            if (appUser is null)
+            {
+                return NotFound("No artist was found with the provided Id");
+            }
+            
+            appUser.UserImageUrl = artist.ArtistImageUrl;
+
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!AppUserExists(id))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
+            }
+
+            return NoContent();
+        }
         private bool AppUserExists(Guid id)
         {
             return _context.Users.Any(e => e.Id == id);

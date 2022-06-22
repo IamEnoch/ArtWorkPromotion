@@ -44,7 +44,6 @@ namespace ArtWorkPromotion.API.Controllers
                     Id = artWork.art.Id,
                     Name = artWork.art.Name,
                     Description = artWork.art.Description,
-                    ArtistName = artWork.appUser.Name,
                     ArtistId = artWork.appUser.Id,
                     Price = artWork.art.Price,
                     Category = artWork.art.Category,
@@ -87,7 +86,6 @@ namespace ArtWorkPromotion.API.Controllers
                     Id = artWork.art.Id,
                     Name = artWork.art.Name,
                     Description = artWork.art.Description,
-                    ArtistName = artWork.appUser.Name,
                     ArtistId = artWork.appUser.Id,
                     Price = artWork.art.Price,
                     Category = artWork.art.Category,
@@ -130,7 +128,6 @@ namespace ArtWorkPromotion.API.Controllers
                     Id = artWork.art.Id,
                     Name = artWork.art.Name,
                     Description = artWork.art.Description,
-                    ArtistName = artWork.appUser.Name,
                     ArtistId = artWork.appUser.Id,
                     Price = artWork.art.Price,
                     Category = artWork.art.Category,
@@ -167,7 +164,6 @@ namespace ArtWorkPromotion.API.Controllers
             var result = new ArtWork(art.Id,
                                art.Name,
                                art.Description,
-                               user?.Name,
                                user.Id,
                                art.Price,
                                art.Category,
@@ -273,7 +269,7 @@ namespace ArtWorkPromotion.API.Controllers
             _context.Arts.Remove(art);
             await _context.SaveChangesAsync();
 
-            return NoContent();
+            return Ok("Deleted successfully");
         }
 
         private bool ArtExists(Guid id)

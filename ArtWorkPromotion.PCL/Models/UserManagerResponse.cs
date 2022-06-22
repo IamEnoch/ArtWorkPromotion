@@ -40,6 +40,11 @@ namespace ArtWorkPromotion.PCL.Models
         ///     Expiry date of the Toke
         /// </summary>
         public DateTime? ExpireDate { get; set; }
+
+        /// <summary>
+        /// ID of a particular user
+        /// </summary>
+        public Guid UserId { get; set; }
     }
 }
 

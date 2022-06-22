@@ -62,9 +62,10 @@ namespace ArtWorkPromotion.API.Services
 
             return new UserManagerResponse
             {
+                UserId = user.Id,
                 Token = tokenAsString,
                 IsSuccess = true,
-                ExpireDate = token.ValidTo
+                ExpireDate = token.ValidTo        
             };
 
         }
