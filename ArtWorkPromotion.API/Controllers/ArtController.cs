@@ -175,7 +175,7 @@ namespace ArtWorkPromotion.API.Controllers
 
         // PUT: api/Art/a40ac323-d0a4-460d-bc66-81fe2c6c3da0
         [HttpPut("{id}")]
-        [Authorize]
+       // [Authorize]
         public async Task<IActionResult> PutArt(Guid id, ArtWork artWork)
         {
             if (id != artWork.Id)
@@ -193,6 +193,7 @@ namespace ArtWorkPromotion.API.Controllers
             art.Description = artWork.Description;
             art.Name = artWork.Name;
             art.Price = artWork.Price;
+            art.ArtImageUrl = artWork.ArtImageUrl;
 
             try
             {
@@ -257,7 +258,7 @@ namespace ArtWorkPromotion.API.Controllers
 
         // DELETE: api/Art/a40ac323-d0a4-460d-bc66-81fe2c6c3da0
         [HttpDelete("{id}")]
-        [Authorize]
+      //  [Authorize]
         public async Task<IActionResult> DeleteArt(Guid id)
         {
             var art = await _context.Arts.FindAsync(id);

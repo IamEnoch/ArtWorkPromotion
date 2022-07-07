@@ -52,13 +52,13 @@ builder.Services.AddAuthentication(options =>
         };
     });
 
-builder.Services.AddAuthorization(options =>
+/*builder.Services.AddAuthorization(options =>
 {
     options.DefaultPolicy = new AuthorizationPolicyBuilder()
         .RequireAuthenticatedUser()
         .AddAuthenticationSchemes("Bearer")
         .Build();
-});
+});*/
 
 // dependency injection
 //builder.Services.AddTransient<IBlobStorageService, BlobStorageService>();
@@ -83,7 +83,7 @@ builder.Services.AddSwaggerGen(options =>
                         Url = new Uri("https://artpromotion.azurewebsites.net/swagger/index.html")
                     }
                 });
-                options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+                /*options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
                 {
                     Description = @"JWT Authorization header using the Bearer scheme. 
                       Enter 'Bearer' [space] and then your token in the text input below.
@@ -108,7 +108,7 @@ builder.Services.AddSwaggerGen(options =>
                         },
                         new List<string>()
                     }
-                });
+                });*/
             });
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();

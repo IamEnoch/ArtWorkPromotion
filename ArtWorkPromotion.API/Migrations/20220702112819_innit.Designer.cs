@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ArtWorkPromotion.API.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20220604140324_RemoveLoationFromArt")]
-    partial class RemoveLoationFromArt
+    [Migration("20220702112819_innit")]
+    partial class innit
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -116,6 +116,9 @@ namespace ArtWorkPromotion.API.Migrations
                     b.Property<bool>("TwoFactorEnabled")
                         .HasColumnType("bit");
 
+                    b.Property<string>("UserImageUrl")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("UserName")
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
@@ -142,6 +145,10 @@ namespace ArtWorkPromotion.API.Migrations
                     b.Property<Guid>("AppUserId")
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<string>("ArtImageUrl")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<int>("Category")
                         .HasColumnType("int");
 
@@ -156,15 +163,40 @@ namespace ArtWorkPromotion.API.Migrations
                     b.Property<double>("Price")
                         .HasColumnType("float");
 
-                    b.Property<string>("StoragePath")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.HasKey("Id");
 
                     b.HasIndex("AppUserId");
 
                     b.ToTable("Arts");
+                });
+
+            modelBuilder.Entity("ArtWorkPromotion.API.Models.Social", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("AppUserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Facebook")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Instagram")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Pintrest")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("WhatsApp")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AppUserId")
+                        .IsUnique();
+
+                    b.ToTable("Social");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<System.Guid>", b =>
@@ -281,6 +313,17 @@ namespace ArtWorkPromotion.API.Migrations
                     b.Navigation("AppUser");
                 });
 
+            modelBuilder.Entity("ArtWorkPromotion.API.Models.Social", b =>
+                {
+                    b.HasOne("ArtWorkPromotion.API.Models.AppUser", "AppUser")
+                        .WithOne("Social")
+                        .HasForeignKey("ArtWorkPromotion.API.Models.Social", "AppUserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("AppUser");
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<System.Guid>", b =>
                 {
                     b.HasOne("ArtWorkPromotion.API.Models.AppRole", null)
@@ -335,6 +378,9 @@ namespace ArtWorkPromotion.API.Migrations
             modelBuilder.Entity("ArtWorkPromotion.API.Models.AppUser", b =>
                 {
                     b.Navigation("Arts");
+
+                    b.Navigation("Social")
+                        .IsRequired();
                 });
 #pragma warning restore 612, 618
         }

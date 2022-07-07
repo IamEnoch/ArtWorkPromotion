@@ -92,7 +92,7 @@ namespace ArtWorkPromotion.API.Services
                 Email = registrationInfo.Email,
                 UserName = registrationInfo.Email,
                 PhoneNumber = registrationInfo.PhoneNumber,
-                Description = registrationInfo.Address,
+                Description = registrationInfo.Description,
                 Brand = registrationInfo.Brand,
                 Location = registrationInfo.Location,
                 Address = registrationInfo.Address
